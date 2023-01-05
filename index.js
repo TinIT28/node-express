@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
+const nationRouter = require("./routes/nationRouter");
 
 const hostname = "localhost";
 const port = 5000;
@@ -12,33 +13,7 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 app.use(express.static(__dirname + "/public"));
 
-app.all("/nations", (req, res, next) => {
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "text/plain");
-  next();
-});
-
-app.get("/nations", (req, res, next) => {
-  res.end("Will send all the nations to you!");
-});
-
-app.post("/nations", (req, res, next) => {
-  res.end(
-    "Will add the nation: " +
-      req.body.name +
-      " with details: " +
-      req.body.description
-  );
-});
-
-app.put("/nations", (req, res, next) => {
-  res.statusCode = 403;
-  res.end("PUT operation not supported on /nations");
-});
-
-app.delete("/nations", (req, res, next) => {
-  res.end("Deleting all nations");
-});
+app.use("/nations", nationRouter);
 
 app.get("/nations/:nationId", (req, res, next) => {
   res.end(
